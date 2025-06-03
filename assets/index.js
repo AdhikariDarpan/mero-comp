@@ -224,16 +224,20 @@ document.querySelectorAll("textarea").forEach((field) => {
     const match = value.slice(0, pos).match(/<(\w+)>$/);
     if (match) {
       const tag = match[1];
-      const openTags = (value.match(new RegExp(`<${tag}(\\s[^>]*)?>`, "g")) || []).length;
-      const closeTags = (value.match(new RegExp(`</${tag}>`, "g")) || []).length;
-
-      if (openTags > closeTags) {
-        const before = value.slice(0, pos);
-        const after = value.slice(pos);
-        field.value = before + `</${tag}>` + after;
-        field.selectionStart = field.selectionEnd = pos;
+      const voidTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'];
+    
+      if (!voidTags.includes(tag)) {
+        const openTags = (value.match(new RegExp(`<${tag}(\\s[^>]*)?>`, "g")) || []).length;
+        const closeTags = (value.match(new RegExp(`</${tag}>`, "g")) || []).length;
+    
+        if (openTags > closeTags) {
+          const before = value.slice(0, pos);
+          const after = value.slice(pos);
+          field.value = before + `</${tag}>` + after;
+          field.selectionStart = field.selectionEnd = pos;
+        }
       }
-
+    }
       updateOutput();
       return;
     }

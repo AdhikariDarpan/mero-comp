@@ -164,9 +164,11 @@ const PreCss = `
       background: #fff;
       color: #000;
     }`;
-const PreJs = `function toggleTheme() {
+const PreJs = `function toggleTheme() 
+    {
       document.body.classList.toggle('dark');
-    }`;
+    }
+    console.info("This is console");`;
 document.getElementById("htmlCode").value = PreHtml;
 document.getElementById("cssCode").value = PreCss;
 document.getElementById("jsCode").value = PreJs;

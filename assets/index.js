@@ -90,7 +90,7 @@ const PreHtml = `
 <body>
   <div class="card">
     <a href="https://darpanadhikari.com.np">
-      <img src="https://darpanadhikari.com.np/addition/images/darpan.png" class="avatar" />
+      <img draggable="false" src="https://darpanadhikari.com.np/addition/images/darpan.png" class="avatar" />
     </a>
     <div class="name">Darpan Adhikari</div>
     <div class="role">Software Developer | Web • App • Python</div>

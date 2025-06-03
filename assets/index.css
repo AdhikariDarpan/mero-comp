@@ -117,7 +117,15 @@ body {
 .code-editor.active {
     display: block;
 }
-
+.code-editor#htmlCode{
+  color: #D73A49;
+}
+.code-editor#cssCode{
+  color: #005CC5;
+}
+.code-editor#jsCode{
+  color: #E36209;
+}
 .output-view {
     width: 100%;
     padding: 20px;

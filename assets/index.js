@@ -81,23 +81,93 @@ const iframe = document.getElementById('editor');
   
 const PreHtml = `
 <!DOCTYPE html>
-<html>
- <head>
- </head>
- <body>
-   <h1>Conic Gradient - Three Colors</h1>
-   <div id="grad1"></div>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Darpan</title>
+</head>
+<body>
+  <div class="card">
+    <img src="https://darpanadhikari.com.np/addition/images/darpan.png" class="avatar" />
+    <div class="name">Darpan Adhikari</div>
+    <div class="role">Web Developer</div>
+    <button class="btn-toggle" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+</body>
 </html>`;
 const PreCss = `
-#grad1 {
-    height: 200px;
-    width: 200px;
-    background-color: red;
-    background-image: conic-gradient(red, yellow, green);
-}`;
+ * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #c3cfe2, #c3cfe2);
+      transition: background 0.3s;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      color: #000;
+      transition: 0.3s;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      object-fit: cover;
+    }
+    .name {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    .role {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+    .btn-toggle {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 30px;
+      background: #000;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .dark {
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #fff;
+    }
+    .dark .card {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+    .dark .role {
+      color: #ccc;
+    }
+    .dark .btn-toggle {
+      background: #fff;
+      color: #000;
+    }`;
+const PreJs = `function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }`;
 document.getElementById("htmlCode").value = PreHtml;
 document.getElementById("cssCode").value = PreCss;
+document.getElementById("jsCode").value = PreJs;
 updateOutput();
 
 const tabButtons = document.querySelectorAll(".tab-button");

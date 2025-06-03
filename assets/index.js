@@ -89,9 +89,11 @@ const PreHtml = `
 </head>
 <body>
   <div class="card">
-    <img src="https://darpanadhikari.com.np/addition/images/darpan.png" class="avatar" />
+    <a href="https://darpanadhikari.com.np">
+      <img src="https://darpanadhikari.com.np/addition/images/darpan.png" class="avatar" />
+    </a>
     <div class="name">Darpan Adhikari</div>
-    <div class="role">Web Developer</div>
+    <div class="role">Software Developer | Web • App • Python</div>
     <button class="btn-toggle" onclick="toggleTheme()">Toggle Theme</button>
   </div>
 </body>

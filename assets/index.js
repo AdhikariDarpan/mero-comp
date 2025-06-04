@@ -473,6 +473,7 @@ window.addEventListener("message", (event) => {
   }
 
   logContainer.appendChild(div);
+  document.getElementById("consoleContainer").scrollTop = document.getElementById("consoleContainer").scrollHeight;
   logContainer.scrollTop = logContainer.scrollHeight;
   updatePopupLogs();
 });

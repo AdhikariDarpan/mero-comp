@@ -225,46 +225,38 @@ document.querySelectorAll("textarea").forEach((field) => {
     if (match) {
       const tag = match[1];
       const voidTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'];
-    
+
       if (!voidTags.includes(tag)) {
         const openTags = (value.match(new RegExp(`<${tag}(\\s[^>]*)?>`, "g")) || []).length;
         const closeTags = (value.match(new RegExp(`</${tag}>`, "g")) || []).length;
-    
+
         if (openTags > closeTags) {
           const before = value.slice(0, pos);
           const after = value.slice(pos);
           field.value = before + `</${tag}>` + after;
           field.selectionStart = field.selectionEnd = pos;
+          updateOutput();
+          return;
         }
       }
     }
-      updateOutput();
-      return;
-    }
+
     if (pairs[char] && field.selectionStart === field.selectionEnd) {
       const closing = pairs[char];
       const before = value.slice(0, pos - 1);
       const after = value.slice(pos);
-    
       const nextChar = after[0];
-      const shouldInsert =
-        !nextChar || (nextChar !== closing && !/\w/.test(nextChar));
-    
+      const shouldInsert = !nextChar || (nextChar !== closing && !/\w/.test(nextChar));
+
       if (shouldInsert) {
         field.value = before + char + closing + after;
-        field.selectionStart = field.selectionEnd = pos; // place cursor in middle
+        field.selectionStart = field.selectionEnd = pos;
         updateOutput();
         return;
       }
-    }    
-
-    // Otherwise, just refresh output
-    document.getElementById("consoleOutput").innerHTML = "";
-    updateOutput();
+    }
   });
 });
-
-
 
 document.getElementById("compileBtn").addEventListener("click", () => {
   document.getElementById("consoleOutput").innerHTML = "";

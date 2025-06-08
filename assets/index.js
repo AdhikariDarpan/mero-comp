@@ -5,13 +5,110 @@ const iframe = document.getElementById('editor');
   doc.write('<html><body><div id="editor-field" style="height:100%; outline:none; border:none;" contenteditable="true"></div></body></html>');
   doc.close();
 
+ const htmlCode = document.getElementById("htmlCode");
+  const cssCode = document.getElementById("cssCode");
+  const jsCode = document.getElementById("jsCode");
+  
+  htmlCode.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+    const tempDiv = document.createElement('html');
+    tempDiv.innerHTML = pastedText;
+  
+    let headContent = '';
+    let bodyContent = '';
+    const styleTags = tempDiv.querySelectorAll('style');
+    let cssContent = '';
+    styleTags.forEach(style => {
+      cssContent += formatCSS(style.textContent.trim()) + '\n\n';
+      style.remove();
+    });
+  
+    const scriptTags = tempDiv.querySelectorAll('script');
+    let jsContent = '';
+    scriptTags.forEach(script => {
+      if (!script.hasAttribute('src')) {
+        jsContent += formatJS(script.textContent.trim()) + '\n\n';
+        script.remove();
+      } else {
+        script.remove(); // remove <script src="...">
+      }
+    });
+  
+    // Move <title> into <head> if needed
+    const title = tempDiv.querySelector('title');
+    if (title) {
+      headContent += formatNode(title, 2);
+      title.remove();
+    }
+  
+    // Collect remaining <head> content (if any)
+    const pastedHead = tempDiv.querySelector('head');
+    if (pastedHead) {
+      headContent += formatNode(pastedHead, 2);
+    }
+  
+    // Collect <body> content
+    const pastedBody = tempDiv.querySelector('body') || tempDiv;
+    bodyContent += formatNode(pastedBody, 2);
+  
+    // Final HTML
+    let finalHTML = null;
+    if(bodyContent.length > 1)
+    {
+       finalHTML =
+      `<!DOCTYPE html>\n<html>\n<head>\n<title>${headContent.trim()}</title>\n</head>\n<body>\n${bodyContent.trim()}\n</body>\n</html>`; 
+      htmlCode.value = finalHTML.trim();
+    }
+  
+    if (finalHTML.trim()) cssCode.value =  cssContent.trim();
+    if (finalHTML.trim()) jsCode.value = jsContent.trim();
+  
+    updateOutput();
+  });
+  
+  function formatNode(node, indent = 2) {
+    let formatted = '';
+    node.childNodes.forEach(child => {
+      if (child.nodeType === Node.ELEMENT_NODE) {
+        const tagOpen = child.outerHTML.split(">")[0] + ">";
+        const closingTag = `</${child.tagName.toLowerCase()}>`;
+        formatted += " ".repeat(indent) + tagOpen + "\n";
+        formatted += formatNode(child, indent + 2);
+        formatted += " ".repeat(indent) + closingTag + "\n";
+      } else if (child.nodeType === Node.TEXT_NODE && child.nodeValue.trim()) {
+        formatted += " ".repeat(indent) + child.nodeValue.trim() + "\n";
+      }
+    });
+    return formatted;
+  }
+  
+  function formatCSS(css) {
+    return css
+      .split('}')
+      .map(rule => rule.trim())
+      .filter(Boolean)
+      .map(rule => {
+        const [selector, body] = rule.split('{');
+        return `${selector.trim()} {\n  ${body.trim().split(';').filter(Boolean).map(line => line.trim() + ';').join('\n  ')}\n}`;
+      }).join('\n\n');
+  }
+  
+  function formatJS(js) {
+    return js
+      .split(';')
+      .map(line => line.trim())
+      .filter(Boolean)
+      .map(line => line + ';')
+      .join('\n');
+  }
+
   function resetIframe() {
     const oldFrame = document.getElementById("outputFrame");
     const newFrame = oldFrame.cloneNode(false); // false to clone without children
     oldFrame.parentNode.replaceChild(newFrame, oldFrame);
     return newFrame;
   }
-
   function updateOutput() {
     
     const rawHTML = document.getElementById("htmlCode").value;
@@ -191,14 +288,13 @@ body {
   background: var(--btn-dark-bg);
   color: var(--btn-dark-color);
 }`;
-const PreJs = `function toggleTheme() 
-    {
-      document.body.classList.toggle('dark');
-    }
-    console.info("This is console");`;
+const PreJs = `function toggleTheme(){
+  document.body.classList.toggle('dark');
+}
+console.info("This is console");`;
 document.getElementById("htmlCode").value = PreHtml;
-document.getElementById("cssCode").value = PreCss;
-document.getElementById("jsCode").value = PreJs;
+document.getElementById("cssCode").value = formatCSS(PreCss);
+document.getElementById("jsCode").value = formatJS(PreJs);
 updateOutput();
 
 const tabButtons = document.querySelectorAll(".tab-button");

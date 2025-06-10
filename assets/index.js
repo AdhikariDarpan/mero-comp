@@ -332,7 +332,9 @@ document.querySelectorAll("textarea").forEach((field) => {
           const after = value.slice(pos);
           field.value = before + `</${tag}>` + after;
           field.selectionStart = field.selectionEnd = pos;
+          if (field.id === "cssCode") {
           updateOutput();
+          }
           return;
         }
       }
@@ -348,7 +350,9 @@ document.querySelectorAll("textarea").forEach((field) => {
       if (shouldInsert) {
         field.value = before + char + closing + after;
         field.selectionStart = field.selectionEnd = pos;
-        updateOutput();
+         if (field.id === "cssCode") {
+          updateOutput();
+          }
         return;
       }
     }

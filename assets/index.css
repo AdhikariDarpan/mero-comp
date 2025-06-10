@@ -61,6 +61,9 @@ body {
   font-weight: 900;
   transition: background-color 0.3s ease;
 }
+.container.split #compileBtn {
+ right: 85px;
+}
 #compileBtn:hover {
   background-color: #09cf8a;
 }
@@ -261,6 +264,6 @@ footer {
     font-size: 8px;
   }
   #compileBtn {
-    right: 44px;
+    right: 70px;
   }
 }

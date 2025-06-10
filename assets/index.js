@@ -380,7 +380,11 @@ document.getElementById("finish").addEventListener("click", function () {
   const htmlContent = doc.getElementById("editor-field").innerHTML;
   popup.style.display = "none";
   doc.getElementById("editor-field").innerHTML = '';
-  extractInlineStylesAndScripts(htmlContent);
+
+  const bodyContent = new DOMParser().parseFromString(htmlContent, "text/html").body.innerHTML.trim();
+  if (bodyContent) {
+    extractInlineStylesAndScripts(htmlContent);
+  }
 });
 function extractInlineStylesAndScripts(htmlContent) {
   const htmlInput = document.getElementById("htmlCode");

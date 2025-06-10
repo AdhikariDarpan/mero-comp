@@ -249,8 +249,9 @@ footer {
     text-decoration: underline;
   }
 @media (max-width: 900px) {
-  .container {
-    flex-wrap: wrap;
+   .container {
+    display: flex;
+    flex-direction: column;
   }
   .code-editor{
     width: 86vw;
@@ -260,15 +261,14 @@ footer {
   }
 }
 @media (max-width: 768px) {
-  .container {
-    display: flex;
-    flex-direction: column;
-  }
   .tab-button{
     padding: 9px 7px;
     font-size: 8px;
   }
   #compileBtn {
     right: 70px;
+  }
+  .screen-size{
+    display: none;
   }
 }

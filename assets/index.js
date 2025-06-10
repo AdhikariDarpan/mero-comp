@@ -109,6 +109,7 @@ const iframe = document.getElementById('editor');
     oldFrame.parentNode.replaceChild(newFrame, oldFrame);
     return newFrame;
   }
+cssCode.addEventListener('input', updateOutput);
   function updateOutput() {
     
     const rawHTML = document.getElementById("htmlCode").value;

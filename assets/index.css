@@ -259,6 +259,9 @@ footer {
   iframe{
     width: 86vw;
   }
+  #screen-size{
+    display: none;
+  }
 }
 @media (max-width: 768px) {
   .tab-button{

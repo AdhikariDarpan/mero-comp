@@ -9,12 +9,15 @@ const iframe = document.getElementById('editor');
   const cssCode = document.getElementById("cssCode");
   const jsCode = document.getElementById("jsCode");
   
-  htmlCode.addEventListener('paste', (e) => {
+htmlCode.addEventListener('paste', (e) => {
+  const selection = window.getSelection();
+  const selectedText = selection.toString();
+  if (selectedText.length === htmlCode.value.length && htmlCode.value.length > 0) {
     e.preventDefault();
     const pastedText = (e.clipboardData || window.clipboardData).getData('text');
     const tempDiv = document.createElement('html');
     tempDiv.innerHTML = pastedText;
-  
+
     let headContent = '';
     let bodyContent = '';
     const styleTags = tempDiv.querySelectorAll('style');
@@ -23,7 +26,7 @@ const iframe = document.getElementById('editor');
       cssContent += formatCSS(style.textContent.trim()) + '\n\n';
       style.remove();
     });
-  
+
     const scriptTags = tempDiv.querySelectorAll('script');
     let jsContent = '';
     scriptTags.forEach(script => {
@@ -31,41 +34,32 @@ const iframe = document.getElementById('editor');
         jsContent += formatJS(script.textContent.trim()) + '\n\n';
         script.remove();
       } else {
-        script.remove(); // remove <script src="...">
+        script.remove();
       }
     });
-  
-    // Move <title> into <head> if needed
+
     const title = tempDiv.querySelector('title');
     if (title) {
       headContent += formatNode(title, 2);
       title.remove();
     }
-  
-    // Collect remaining <head> content (if any)
+
     const pastedHead = tempDiv.querySelector('head');
-    if (pastedHead) {
-      headContent += formatNode(pastedHead, 2);
-    }
-  
-    // Collect <body> content
+    if (pastedHead) headContent += formatNode(pastedHead, 2);
+
     const pastedBody = tempDiv.querySelector('body') || tempDiv;
     bodyContent += formatNode(pastedBody, 2);
-  
-    // Final HTML
-    let finalHTML = null;
-    if(bodyContent.length > 1)
-    {
-       finalHTML =
-      `<!DOCTYPE html>\n<html>\n<head>\n<title>${headContent.trim()}</title>\n</head>\n<body>\n${bodyContent.trim()}\n</body>\n</html>`; 
+
+    if(bodyContent.length > 1) {
+      const finalHTML =
+        `<!DOCTYPE html>\n<html>\n<head>\n<title>${headContent.trim()}</title>\n</head>\n<body>\n${bodyContent.trim()}\n</body>\n</html>`;
       htmlCode.value = finalHTML.trim();
+      cssCode.value = cssContent.trim();
+      jsCode.value = jsContent.trim();
+      updateOutput();
     }
-  
-    if (finalHTML.trim()) cssCode.value =  cssContent.trim();
-    if (finalHTML.trim()) jsCode.value = jsContent.trim();
-  
-    updateOutput();
-  });
+  }
+});
   
   function formatNode(node, indent = 2) {
     let formatted = '';

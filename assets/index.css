@@ -172,11 +172,14 @@ iframe {
 }
 #converter,
 #download {
-  background-color: aqua;
+  background-color: #b41dcc;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-right: 3px;
+  padding: 3px 5px;
+  font-weight: 600;
+  color: #fff;
 }
 #download {
     background-color: #007bff;
